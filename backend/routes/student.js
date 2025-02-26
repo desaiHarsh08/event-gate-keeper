@@ -184,4 +184,24 @@ router.get('/fetch-all', fetchuser, async (req, res) => {
 });
 
 
+// ROUTE 7: Search a student using POST "/api/student/search". No login requires
+router.get('/present-allowed', async (req, res) => {
+    try {
+        // Check for the student entry exist
+        const students = await StudentModel.find();
+        let presentStudents = students.filter((student) => student.attendance === true && student.allowed === true).length;
+
+        const obj = { presentStudents, totalStudents: students.length }
+
+        return res.status(200).json(obj);
+
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ error: "Internal Server Error!" });
+    }
+});
+
+
+
 export default router;
